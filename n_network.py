@@ -136,7 +136,7 @@ class NeuralNetwork(object):
     for node in self.input_nodes:
       for h_node in self.hidden_nodes:
         if rand_weight:
-          weight = random.random()
+          weight = random.random() * random.choice([-1,1])
         else:
           weight = raw_input("enter weight between "+\
               str(node.get_id())+" and "+str(h_node.get_id())+": ")
@@ -146,7 +146,7 @@ class NeuralNetwork(object):
     for o_node in self.output_nodes:
       for h_node in self.hidden_nodes:
         if rand_weight:
-          weight = random.random()
+          weight = random.random() * random.choice([-1,1])
         else:
           weight = raw_input("enter weight between "+\
               str(h_node.get_id())+" and "+str(o_node.get_id())+": ")
@@ -160,7 +160,7 @@ class NeuralNetwork(object):
     assert(len(inputs) == len(self.input_nodes))
 
     for n,in_node in enumerate(self.input_nodes):
-        in_node.set_input(inputs[n])
+        in_node.set_input(float(inputs[n]))
 
     for h_node in self.hidden_nodes:
       h_node.sigmoid()
@@ -168,14 +168,15 @@ class NeuralNetwork(object):
     for o_node in self.output_nodes:
       o_node.set_output()
 
+    return [o_node.output for o_node in self.output_nodes]
+
   def back_prop(self,expected,i):
     """call back_prop with expected output of the output
     node and i"""
     assert(len(expected) == len(self.output_nodes))
 
     for n,o_node in enumerate(self.output_nodes):
-      o_node.error_output(expected[n])
-      print o_node.error
+      o_node.error_output(float(expected[n]))
 
     for h_node in self.hidden_nodes:
       h_node.set_error()
@@ -185,6 +186,8 @@ class NeuralNetwork(object):
 
     for in_node in self.input_nodes:
       in_node.update_weight(i)
+
+    return [o_node.error for o_node in self.output_nodes]
 
   def print_net(self):
     for node in self.hidden_nodes:
