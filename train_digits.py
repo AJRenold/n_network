@@ -35,7 +35,7 @@ def choice(out_list):
 
 ## read in the digits_train.csv file
 training_line = []
-for line in islice(f,1):
+for line in islice(f,1,None):
   training_line.append(line.replace('\r\n','').split(','))
 
 ## parse each line in the data, convert expected to binary list
@@ -47,7 +47,7 @@ for line in training_line:
 print("done")
 
 ## create the network and connect the nodes
-n = NeuralNetwork(784,40,10)
+n = NeuralNetwork(784,50,10)
 n.connect_nodes()
 print("connected")
 print("training...")
@@ -67,7 +67,7 @@ correct = 0
 incorrect = 0
 total = 0
 
-for line in islice(training_line,10001):
+for line in islice(training_line,10001,None):
   if choice(line[0]) == choice(n.forward_prop(line[1:])):
     #print "correct",line[0],n.forward_prop(line[1:])
     correct += 1
